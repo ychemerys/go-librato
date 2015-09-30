@@ -257,10 +257,26 @@ func Int(v int) *int {
 	return p
 }
 
+// Uint is a helper routine that allocates a new uint value
+// to store v and returns a pointer to it.
+func Uint(v uint) *uint {
+	p := new(uint)
+	*p = v
+	return p
+}
+
 // String is a helper routine that allocates a new string value
 // to store v and returns a pointer to it.
 func String(v string) *string {
 	p := new(string)
+	*p = v
+	return p
+}
+
+// Float is a helper routine that allocates a new float64 value
+// to store v and returns a pointer to it.
+func Float(v float64) *float64 {
+	p := new(float64)
 	*p = v
 	return p
 }
