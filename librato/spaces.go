@@ -82,7 +82,7 @@ func (s *SpacesService) Get(id uint) (*Space, *http.Response, error) {
 //
 // Librato API docs: http://dev.librato.com/v1/post/spaces
 func (s *SpacesService) Create(space *Space) (*Space, *http.Response, error) {
-	req, err := s.client.NewRequest("POST", "spaces", nil)
+	req, err := s.client.NewRequest("POST", "spaces", space)
 	if err != nil {
 		return nil, nil, err
 	}
