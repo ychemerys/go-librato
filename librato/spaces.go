@@ -99,20 +99,14 @@ func (s *SpacesService) Create(space *Space) (*Space, *http.Response, error) {
 // Edit a space.
 //
 // Librato API docs: http://dev.librato.com/v1/put/spaces/:id
-func (s *SpacesService) Edit(spaceID uint, space *Space) (*Space, *http.Response, error) {
+func (s *SpacesService) Edit(spaceID uint, space *Space) (*http.Response, error) {
 	u := fmt.Sprintf("spaces/%d", spaceID)
 	req, err := s.client.NewRequest("PUT", u, space)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 
-	sp := new(Space)
-	resp, err := s.client.Do(req, sp)
-	if err != nil {
-		return nil, resp, err
-	}
-
-	return sp, resp, err
+	return s.client.Do(req, nil)
 }
 
 // Delete a space.
