@@ -53,9 +53,12 @@ func (m *PaginationMeta) EncodeValues(name string, values *url.Values) error {
 		return nil
 	}
 
-	values.Set("offset", fmt.Sprintf("%d", m.Offset))
-	values.Set("length", fmt.Sprintf("%d", m.Length))
-
+	if m.Offset != 0 {
+		values.Set("offset", fmt.Sprintf("%d", m.Offset))
+	}
+	if m.Length != 0 {
+		values.Set("length", fmt.Sprintf("%d", m.Length))
+	}
 	if m.OrderBy != "" {
 		values.Set("orderby", m.OrderBy)
 	}
