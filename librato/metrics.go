@@ -81,10 +81,10 @@ func (m *MetricsService) List(opts *ListMetricsOptions) ([]Metric, *ListMetricsR
 		nil
 }
 
-// Update a metric.
+// Edit a metric.
 //
 // Librato API docs: https://www.librato.com/docs/api/#update-metric-by-name
-func (m *MetricsService) Update(metric *Metric) (*http.Response, error) {
+func (m *MetricsService) Edit(metric *Metric) (*http.Response, error) {
 	u := fmt.Sprintf("metrics/%s", *metric.Name)
 
 	req, err := m.client.NewRequest("PUT", u, metric)
