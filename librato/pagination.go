@@ -5,7 +5,8 @@ import (
 	"net/url"
 )
 
-// Pagination metadata from Librato API responses
+// PaginationResponseMeta contains pagination metadata from Librato API
+// responses.
 type PaginationResponseMeta struct {
 	Offset uint `json:"offset"`
 	Length uint `json:"length"`
@@ -35,7 +36,7 @@ func (p *PaginationResponseMeta) nextPage(originalQuery *PaginationMeta) (next *
 	return next
 }
 
-// Metadata that the librato API requires for pagination
+// PaginationMeta contains metadata that the Librato API requires for pagination
 // http://dev.librato.com/v1/pagination
 type PaginationMeta struct {
 	Offset  uint   `url:"offset,omitempty"`
@@ -44,9 +45,9 @@ type PaginationMeta struct {
 	Sort    string `url:"sort,omitempty"`
 }
 
-// Custom Encoder for the query string encoder library.
-// The encoder allows other structs to embed PaginationMeta, and have it
-// appear in the top-level query string fields without nesting.
+// EncodeValues is implemented to allow other strucs to embed PaginationMeta and
+// still use github.com/google/go-querystring/query to encode the struct. It
+// makes PaginationMeta implement query.Encoder.
 func (m *PaginationMeta) EncodeValues(name string, values *url.Values) error {
 	if m == nil {
 		return nil

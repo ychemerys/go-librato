@@ -5,10 +5,13 @@ import (
 	"net/http"
 )
 
+// MetricsService handles communication with the Librato API methods related to
+// metrics.
 type MetricsService struct {
 	client *Client
 }
 
+// Metric represents a Librato Metric.
 type Metric struct {
 	Name        *string           `json:"name"`
 	Period      *uint             `json:"period,omitempty"`
@@ -46,6 +49,9 @@ type ListMetricsResponse struct {
 	NextPage *PaginationMeta
 }
 
+// List metrics using the provided options.
+//
+// Librato API docs: https://www.librato.com/docs/api/#retrieve-metrics
 func (m *MetricsService) List(opts *ListMetricsOptions) ([]Metric, *ListMetricsResponse, error) {
 	u, err := urlWithOptions("metrics", opts)
 	if err != nil {
@@ -75,6 +81,9 @@ func (m *MetricsService) List(opts *ListMetricsOptions) ([]Metric, *ListMetricsR
 		nil
 }
 
+// Update a metric.
+//
+// Librato API docs: https://www.librato.com/docs/api/#update-metric-by-name
 func (m *MetricsService) Update(metric *Metric) (*http.Response, error) {
 	u := fmt.Sprintf("metrics/%s", *metric.Name)
 
