@@ -81,6 +81,60 @@ func (m *MetricsService) List(opts *ListMetricsOptions) ([]Metric, *ListMetricsR
 		nil
 }
 
+// Get a metric by name
+//
+// Librato API docs: https://www.librato.com/docs/api/#retrieve-metric-by-name
+func (m *MetricsService) Get(name string) (*Metric, *http.Response, error) {
+	u := fmt.Sprintf("metrics/%s", name)
+	req, err := m.client.NewRequest("GET", u, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	metric := new(Metric)
+	resp, err := m.client.Do(req, metric)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return metric, resp, err
+}
+
+type MeasurementSubmission struct {
+	MeasureTime *uint               `json:"measure_time,omitempty"`
+	Source      *string             `json:"source,omitempty"`
+	Gauges      []*GaugeMeasurement `json:"gauges,omitempty"`
+	Counters    []*Measurement      `json:"counters,omitempty"`
+}
+
+type Measurement struct {
+	Name        string   `json:"name"`
+	Value       *float64 `json:"value,omitempty"`
+	MeasureTime *uint    `json:"measure_time,omitempty"`
+	Source      *string  `json:"source,omitempty"`
+}
+
+type GaugeMeasurement struct {
+	*Measurement
+	Count      *uint    `json:"count,omitempty"`
+	Sum        *float64 `json:"sum,omitempty"`
+	Max        *float64 `json:"max,omitempty"`
+	Min        *float64 `json:"min,omitempty"`
+	SumSquares *float64 `json:"sum_squares,omitempty"`
+}
+
+// Submit metrics
+//
+// Librato API docs: https://www.librato.com/docs/api/#submit-metrics
+func (m *MetricsService) Submit(measurements *MeasurementSubmission) (*http.Response, error) {
+	req, err := m.client.NewRequest("POST", "/metrics", measurements)
+	if err != nil {
+		return nil, err
+	}
+
+	return m.client.Do(req, nil)
+}
+
 // Edit a metric.
 //
 // Librato API docs: https://www.librato.com/docs/api/#update-metric-by-name
@@ -88,6 +142,19 @@ func (m *MetricsService) Edit(metric *Metric) (*http.Response, error) {
 	u := fmt.Sprintf("metrics/%s", *metric.Name)
 
 	req, err := m.client.NewRequest("PUT", u, metric)
+	if err != nil {
+		return nil, err
+	}
+
+	return m.client.Do(req, nil)
+}
+
+// Delete a metric.
+//
+// Librato API docs: https://www.librato.com/docs/api/#delete-metric-by-name
+func (m *MetricsService) Delete(name string) (*http.Response, error) {
+	u := fmt.Sprintf("metrics/%s", name)
+	req, err := m.client.NewRequest("DELETE", u, nil)
 	if err != nil {
 		return nil, err
 	}
