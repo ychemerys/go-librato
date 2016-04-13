@@ -44,8 +44,7 @@ type Client struct {
 	UserAgent string
 
 	// Services used to manipulate API entities.
-	Spaces *SpacesService
-
+	Spaces  *SpacesService
 	Metrics *MetricsService
 }
 
