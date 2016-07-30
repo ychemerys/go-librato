@@ -46,6 +46,7 @@ type Client struct {
 	// Services used to manipulate API entities.
 	Spaces  *SpacesService
 	Metrics *MetricsService
+	Alerts  *AlertsService
 }
 
 // NewClient returns a new Librato API client bound to the public Librato API.
@@ -76,6 +77,7 @@ func NewClientWithBaseURL(baseURL *url.URL, email, token string) *Client {
 
 	c.Spaces = &SpacesService{client: c}
 	c.Metrics = &MetricsService{client: c}
+	c.Alerts = &AlertsService{client: c}
 
 	return c
 }
