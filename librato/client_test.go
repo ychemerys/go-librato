@@ -105,7 +105,7 @@ func TestNewRequest_invalidJSON(t *testing.T) {
 	if err == nil {
 		t.Error("Expected error to be returned.")
 	}
-	if err, ok := err.(*json.UnsupportedTypeError); !ok {
+	if _, ok := err.(*json.UnsupportedTypeError); !ok {
 		t.Errorf("Expected a JSON error; got %#v.", err)
 	}
 }
