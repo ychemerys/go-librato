@@ -98,7 +98,7 @@ func TestNewRequest_invalidJSON(t *testing.T) {
 	c := NewClient("", "")
 
 	type T struct {
-		A map[int]interface{}
+		A map[bool]interface{}
 	}
 	_, err := c.NewRequest("GET", "/", &T{})
 
