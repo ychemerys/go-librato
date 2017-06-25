@@ -223,7 +223,12 @@ func TestCheckResponse(t *testing.T) {
 
 	want := &ErrorResponse{
 		Response: res,
-		Errors:   ErrorResponseMessages{Request: []string{"m"}, Params: map[string][]string{"r": {"m"}}},
+		Errors: ErrorResponseMessages{
+			Request: []string{"m"},
+			Params: map[string]interface{}{
+				"r": []interface{}{"m"},
+			},
+		},
 	}
 	if !reflect.DeepEqual(err, want) {
 		t.Errorf("Error = %#v, want %#v", err, want)
