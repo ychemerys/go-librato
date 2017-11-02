@@ -209,6 +209,33 @@ func TestDo_redirectLoop(t *testing.T) {
 	}
 }
 
+func TestDo_emptyResponse(t *testing.T) {
+	setup()
+	defer teardown()
+
+	type foo struct{}
+
+	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		if m := "PUT"; m != r.Method {
+			t.Errorf("Request method = %v, want %v", r.Method, m)
+		}
+		w.WriteHeader(http.StatusNoContent)
+	})
+
+	req, _ := client.NewRequest("PUT", "/", nil)
+	body := new(foo)
+	_, err := client.Do(req, body)
+
+	if err != nil {
+		t.Errorf("Unexpected error returned; got %#v", err)
+	}
+
+	want := &foo{}
+	if !reflect.DeepEqual(body, want) {
+		t.Errorf("Response body = %v, want %v", body, want)
+	}
+}
+
 func TestCheckResponse(t *testing.T) {
 	res := &http.Response{
 		Request:    &http.Request{},
